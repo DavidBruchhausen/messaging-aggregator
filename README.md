@@ -1,0 +1,1 @@
+Service to aggregate messages and send them in batches to an API. 

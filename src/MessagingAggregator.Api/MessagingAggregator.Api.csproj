@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
+    <PackageReference Include="Serilog" Version="2.11.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MessagingAggregator.Application\MessagingAggregator.Application.csproj" />
+    <ProjectReference Include="..\MessagingAggregator.HostedService\MessagingAggregator.HostedService.csproj" />
+    <ProjectReference Include="..\MessagingAggregator.Gateway\MessagingAggregator.Gateway.csproj" />
+  </ItemGroup>
+
+</Project>
