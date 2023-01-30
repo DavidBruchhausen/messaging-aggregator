@@ -35,7 +35,9 @@ Similarly to the publishing of messages, sending batches to the aggregation serv
 2. If the service needed to scale dramatically to process up to millions of events per second, Apache Kafka could be used instead of RabbitMQ as it can handle higher throughput.
 
 ## Instructions
-[Docker](https://www.docker.com/) needs to be installed. Navigate to the route directory of the project and run the following command:
+[Docker](https://www.docker.com/) needs to be installed. 
+Open the docker-compose.yml file, and update the variable named AGGREGATED_MESSAGE_SERVER_URL with the URL of the upstream service.
+Navigate to the route directory of the project and run the following command:
 
 ```
 docker compose up --build

@@ -26,6 +26,6 @@ public class MessageController : ApiController
     public IActionResult CaptureMessage([FromBody] Message request)
     {
         _queueService.SendMessage(request);
-        return Ok("Message recevied.");
+        return Ok("Message received.");
     }
 }
