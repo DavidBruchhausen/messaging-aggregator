@@ -10,7 +10,7 @@ public class ApiController : ControllerBase
     protected IActionResult Ok(string message = null)
     {
         var meta = new Meta(HttpStatusCode.OK, message);
-        return base.Ok(new DataResponse<Meta, object>(meta, new List<object>()));
+        return base.Ok(new MetaResponse<Meta>(meta));
     }
 
     protected IActionResult Ok<TData>(TData data, string message = null)

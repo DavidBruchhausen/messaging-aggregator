@@ -21,6 +21,7 @@ public class ConsumerService : BackgroundService
     private static readonly int _maxRetries = 3;
     private static readonly int _retryInterval = 1000; // milliseconds
     private static readonly string _queueName = "messages";
+    private static readonly string _route = "aggregated-messages";
 
     public ConsumerService(IConfiguration configuration, IProvider provider)
     {
@@ -43,7 +44,7 @@ public class ConsumerService : BackgroundService
         stoppingToken.Register(() => _logger.Information("ConsumerService background task is stopping."));
 
         _logger.Information("Sleeping to wait for RabbitMQ to start up...");
-        Task.Delay(10000).Wait();
+        Task.Delay(15000).Wait();
 
         using var connection = _factory.CreateConnection();
         using var channel = connection.CreateModel();
@@ -97,7 +98,7 @@ public class ConsumerService : BackgroundService
                 {
                     Batches = batches
                 };
-                await _provider.SendPostRequest(request, "aggregated-messages");
+                await _provider.SendPostRequest(request, _route);
                 _logger.Information("Sent batch: \n {0}", batches.AsJson());
                 success = true;
                 break;

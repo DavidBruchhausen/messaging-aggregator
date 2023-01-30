@@ -1,9 +1,8 @@
-using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.Json;
 using MessagingAggregator.Api.Common.Responses;
 using MessagingAggregator.Api.Common.Responses.Metadata;
-using Serilog;
+using ValidationException = MessagingAggregator.Application.Common.Exceptions.ValidationException;
 
 namespace MessagingAggregator.Api.Middleware;
 
@@ -29,14 +28,10 @@ public class ExceptionMiddleware
         {
             await _next(httpContext);
         }
-        // catch (NotFoundException)
-        // {
-        //     await HandleNotFoundExceptionAsync(httpContext);
-        // }
-        // catch (ValidationException ex)
-        // {
-        //     await HandleValidationExceptionAsync(httpContext, ex);
-        // }
+        catch (ValidationException ex)
+        {
+            await HandleValidationExceptionAsync(httpContext, ex);
+        }
         catch (UnauthorizedAccessException)
         {
             await HandleUnauthorizedAccessExceptionAsync(httpContext);
@@ -73,10 +68,10 @@ public class ExceptionMiddleware
         context.Response.StatusCode = (int)statusCode;
     }
 
-    private static Task HandleNotFoundExceptionAsync(HttpContext context)
+    private static Task HandleUnauthorizedAccessExceptionAsync(HttpContext context)
     {
-        const HttpStatusCode statusCode = HttpStatusCode.NotFound;
-        const string message = "The requested resource could not be found.";
+        const HttpStatusCode statusCode = HttpStatusCode.Unauthorized;
+        const string message = "Unauthorized.";
 
         var meta = new Meta(statusCode, message);
         var metaResponse = new MetaResponse<Meta>(meta);
@@ -84,12 +79,11 @@ public class ExceptionMiddleware
         return WriteResponse(context, statusCode, metaResponse);
     }
 
-    private static Task HandleUnauthorizedAccessExceptionAsync(HttpContext context)
+        private static Task HandleValidationExceptionAsync(HttpContext context, ValidationException ex)
     {
-        const HttpStatusCode statusCode = HttpStatusCode.Unauthorized;
-        const string message = "Unauthorized.";
+        const HttpStatusCode statusCode = HttpStatusCode.BadRequest;
 
-        var meta = new Meta(statusCode, message);
+        var meta = new Meta(statusCode, ex.Message);
         var metaResponse = new MetaResponse<Meta>(meta);
 
         return WriteResponse(context, statusCode, metaResponse);
